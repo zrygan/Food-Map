@@ -32,7 +32,8 @@ The dependencies of this project are:
 * [NetworkX](https://networkx.org/)
 * [NumPy](https://numpy.org/)
 * [SciPy](https://scipy.org/)
-
+* [Matplotlib](https://matplotlib.org/)
+  
 To install these, run the following command:
 
 > If the you have the virtual environment remember to be inside `venv`.
