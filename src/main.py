@@ -7,10 +7,15 @@ from graph import *
 if __name__ == "__main__":
     """ the following variables can be changed for tesitng
     """
-    start_vertex = "A"
-    goal_vertex = "A"
+    start_index = "A"
+    goal_index = "A"
     
-    restos = {
+    # a dictionary of the restaurant and their single-letter equivalent
+    # since this is a dictionary we cannot use numerical indices to access each vertex
+    # we can instead use the ASCII equivalent of each alphabetical characher
+    # example:      vertices[chr(65)] == "University Mall"
+    #               A in ASCII is thr 65th character
+    vertices = {
         "A": "University Mall",
         "B": "Mcdonald's",
         "C": "Perico's",
@@ -33,27 +38,23 @@ if __name__ == "__main__":
         "U": "Fidel A. Reyes St.",
     }
 
-    """ the following variables CANNOT be changed
-    """
-    vertex = []
     edges = []
+    
+    # an array of edge weights of each edge
+    # len(weights) == len(edges)    => each edge must have a weight if at least one edge has
     weights = []
-    heuristics = {}
 
-    n_edges = 0
-    n_vertices = 0
+    # an array of the heuristics of each node
+    # len(heuristics) == len(vertices)    => each node must have a heuristic if at least one node has
+    heuristics = []
 
-    start = restos[start_vertex]
-    goal = restos[goal_vertex]
+    start_node = vertices[start_index]
+    # goal_node = edges[goal_index] #FIXME: this is an error since edges is NOT a dict, it is a list/array
 
-    for resto in restos:
-        vertex.append(resto)
-        n_edges += 1
-
-    graph = Graph(n_edges, n_vertices)
-    graph.make(vertex, edges)
-    graph.give_weight(weights)
-    graph.give_heuristic(heuristics)
-    graph.view()
+    # graph = Graph(len(edges), len(vertices))
+    # graph.make(vertices, edges)
+    # graph.give_weight(weights)          # we can keep this even if the weight array is empty
+    # graph.give_heuristic(heuristics)    # same for this
+    # graph.view()
 
     print("Done")
