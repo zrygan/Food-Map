@@ -41,7 +41,7 @@ class Graph:
         Raises:
             ValueError: If the number of weights does not match the number of edges.
         """
-        if len(weights) != len(self.edges):
+        if len(weights) > 0 and len(weights) != len(self.edges):
             raise ValueError("Number of weights MUST BE equal to the number of edges.")
         
         for edge, weight in zip(self.edges, weights):
@@ -57,7 +57,7 @@ class Graph:
         Raises:
             ValueError: If a vertex is not found in the graph.
         """
-        for vertex, heuristic in heuristics.items():
+        for vertex, heuristic in heuristics:
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
             else:

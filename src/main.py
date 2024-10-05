@@ -38,8 +38,55 @@ if __name__ == "__main__":
         "U": "Fidel A. Reyes St.",
     }
 
-    edges = []
-    
+    # idk how the edges work, but ill make this for now
+    edges = [
+    ("U", "J"),
+    ("J", "K"),
+    ("J", "L"),
+    ("H", "L"),
+    ("J", "I"),
+    ("I", "N"),
+    ("N", "M"),
+    ("I", "G"),
+    ("G", "F"),
+    ("F", "E"),
+    ("E", "D"),
+    ("E", "O"),
+    ("O", "S"),
+    ("S", "P"),
+    ("O", "P"),
+    ("P", "Q"),
+    ("Q", "R"),
+    ("R", "T"),
+    ("T", "A"),
+    ("A", "B"),
+    ("B", "C"),
+    ("C", "A"),
+    # Adding reciprocal edges
+    # this can be removed, if unecessary (just here if needed) - zhean
+    ("J", "U"),
+    ("K", "J"),
+    ("L", "J"),
+    ("L", "H"),
+    ("I", "J"),
+    ("N", "I"),
+    ("M", "N"),
+    ("G", "I"),
+    ("F", "G"),
+    ("E", "F"),
+    ("D", "E"),
+    ("O", "E"),
+    ("S", "O"),
+    ("P", "S"),
+    ("P", "O"),
+    ("Q", "P"),
+    ("R", "Q"),
+    ("T", "R"),
+    ("A", "T"),
+    ("B", "A"),
+    ("C", "B"),
+    ("A", "C")]
+        
     # an array of edge weights of each edge
     # len(weights) == len(edges)    => each edge must have a weight if at least one edge has
     weights = []
@@ -51,10 +98,10 @@ if __name__ == "__main__":
     start_node = vertices[start_index]
     # goal_node = edges[goal_index] #FIXME: this is an error since edges is NOT a dict, it is a list/array
 
-    # graph = Graph(len(edges), len(vertices))
-    # graph.make(vertices, edges)
-    # graph.give_weight(weights)          # we can keep this even if the weight array is empty
-    # graph.give_heuristic(heuristics)    # same for this
-    # graph.view()
+    graph = Graph(len(edges), len(vertices))
+    graph.make(vertices, edges)
+    graph.give_weight(weights)          # we can keep this even if the weight array is empty
+    graph.give_heuristic(heuristics)    # same for this
+    graph.view()
 
     print("Done")
