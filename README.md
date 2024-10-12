@@ -33,6 +33,7 @@ The dependencies of this project are:
 * [NumPy](https://numpy.org/)
 * [SciPy](https://scipy.org/)
 * [Matplotlib](https://matplotlib.org/)
+* [Indexed Priority Queue](https://github.com/gabrielbazan/indexed_priority_queue)
   
 To install these, run the following command:
 
