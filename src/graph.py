@@ -63,6 +63,20 @@ class Graph:
             else:
                 raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
 
+    def get_neighbors(self, vertex: str):
+        """Returns an iterator containing the neighbors of a given vertex.
+
+            Args:
+                vertex (str): A vertex in the graph
+
+            Raises:
+                ValueError: If a vertex is not found in the graph.
+        """
+        if vertex in self.vertices:
+            return self.G.neighbors(vertex)
+        else:
+            raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
+
     def view(self):
         """View the plot as a UI."""
         positions = nx.spring_layout(self.G)
