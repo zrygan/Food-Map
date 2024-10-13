@@ -1,22 +1,37 @@
+from imports import IndexedPriorityQueue
+
 """
-Uniform Cost Search !
-- Exploring a graph blindly based solely on opening up nodes
-and their children with the lowest cost until the goal is reached.
+    Performs Uniform Cost Search to find the shortest path from the start vertex to the goal vertex.
 
-Data Structures to use:
-    - to_explore queue
-    - visited list of some kind
-
-    1. loop while the to_explore queue is not empty
-    2.      get the node with the lowest cost (current)
-    3.      if the current node is the goal, return the path
-    4.      loop through all the neighbors of the current node
-    5.          compute the cost of the neighbors of the current node
-    6.          if the neighbor is not in visited and its cost is lower than the current neighbor's cost
-    7.              add the neighbor to the to_explore queue and update its cost as the current neighbor's cost plus the edge cost
-
-References:
-- https://www.educative.io/answers/what-is-uniform-cost-search
+    Args:
+        graph (Graph): A graph object containing the vertices and edges.
+        start (String): The starting vertex.
+        goal (String): The goal vertex.
 """
+
+# FIXME: not actually sure if this works \(T-T)/ idk python pls -emmman
 
 def ucs(graph, start, goal):
+    # initialization
+    open_vertices = [] # list of vertices open / to traverse.
+    path = [] # path that will contain the least costly traversal to the goal vertex.
+    costs = 0 # costs of traversals 
+
+    # loop while there are still open vertices
+    while open_vertices:
+        
+        # get the vertex with the lowest cost
+
+        # check if the goal vertex has been reached
+
+            # backtrack from the goal vertex to the start and use as path
+
+            # return the path and its cost of traversal
+
+        # traverse the neighbors of the current vertex
+
+            # check if the current path costs lower than the previous path
+
+    return None # No path found; goal does not exist / is not reachable
+
+# Reference: https://www.educative.io/answers/what-is-uniform-cost-search
