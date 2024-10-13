@@ -1,5 +1,4 @@
 # work in progress ! ! ! also to be tested
-from turtledemo.penrose import start
 
 from imports import *
 
