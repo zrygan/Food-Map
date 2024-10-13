@@ -1,6 +1,6 @@
 # work in progress ! ! ! also to be tested
 
-from imports import *
+from imports import IndexedPriorityQueue
 
 def trace_path():
     # should use parent_list
@@ -43,7 +43,7 @@ def a_star(graph, start_index, goals):
     while len(open_list) > 0:
         #4. Select node w/ lowest f value from open_list. Set this as current node
         #   (Recall f = g + h, where g = sum of actual weight from start to current node & h = heuristic value)
-        current = open_list.pop()[0][0]
+        current = open_list.pop()[0][0] #only returns the key since this returns a tuple (key, index)
         print(current)
         #5. If current node is goal node:
         if current in goals:
