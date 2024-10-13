@@ -21,7 +21,7 @@ def a_star(graph, start_index, goals):
 
     """
     #make sure the parameters are valid
-    if len(graph.vertices) < 1 or start_index not in graph.vertices or [index for index in goals if index not in graph.vertices]:
+    if len(graph.vertices) < 1 or start_index not in graph.vertices or any(index not in graph.vertices for index in goals):
         return None
 
     #A* algorithm pseudocode
