@@ -60,7 +60,7 @@ def a_star(graph, start_index, goals):
                 if neighbor in closed_list:
                     continue
                 #11. If the neighbor is not in open_list:
-                if neighbor not in open_list:
+                if not open_list.__contains__(neighbor):
                     #12. Compute its g value (using compute_g())
                     g = compute_g()
                     #13. Get its h value
