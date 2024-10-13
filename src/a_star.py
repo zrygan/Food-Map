@@ -59,10 +59,10 @@ def a_star(graph, start_index, goals):
                 #10. If the neighbor is in closed_list, skip
                 if neighbor in closed_list:
                     continue
-                #11. If the neighbor is not in open_list:
+                # 12. Compute its g value (using compute_g())
+                g = compute_g()
+                # 11. If the neighbor is not in open_list:
                 if not open_list.__contains__(neighbor):
-                    #12. Compute its g value (using compute_g())
-                    g = compute_g()
                     #13. Get its h value
                     h = graph.heuristic[neighbor]
                     f = g + h
@@ -72,7 +72,6 @@ def a_star(graph, start_index, goals):
                     g_values[neighbor] = g
                 #15. If the neighbor is already in open_list:
                 else:
-                    g = compute_g()
                     #16. If the new g value is lower than the current g value:
                     if g < g_values[neighbor]:
                         # 17. Update the neighbor’s g and f values and update its parent to the current node.
