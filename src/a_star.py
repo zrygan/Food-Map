@@ -2,12 +2,54 @@
 
 from imports import IndexedPriorityQueue
 
-def trace_path():
+#To be tested --Thara
+def trace_path(parent_list, start, goal):
     # should use parent_list
+    """
+    Traces the shortest path from the start (root) node to the goal node using the parent_list.
+    
+    Args:
+        parent_list: A dictionary mapping each node to its parent node.
+        start: The starting (root) node.
+        goal: The goal node.
+        
+    Returns:
+        path: The traced path from start to goal as a list.
+    """
+    path = []
+    current = goal
+    
+    # Trace back from goal to start using the parent_list
+    while current != start:
+        path.append(current)
+        current = parent_list[current]
+    
+    # Append the start node and reverse the path to get start -> goal order
+    path.append(start)
+    path.reverse()
+    
+    return path
 
-def compute_g():
+def compute_g(current_node, neighbor, g_values, graph):
     # should use g_values list
     # you can apply dynamic programming!!
+    """
+    Computes the g value (cost from start to the current node) for the neighbor.
+    
+    Args:
+        current_node: The current node in the graph.
+        neighbor: The neighboring node to compute the g value for.
+        g_values: A dictionary storing g values for each node.
+        graph: The graph containing the edges and weights.
+        
+    Returns:
+        g: The g value for the neighbor node.
+    """
+    # Assuming graph.get_edge_weight() returns the weight of the edge between two nodes
+    edge_weight = graph.get_edge_weight(current_node, neighbor)
+    
+    # g(neighbor) = g(current_node) + weight(current_node, neighbor)
+    return g_values[current_node] + edge_weight
 
 def a_star(graph, start_index, goals):
     #ill rewrite this later xp
