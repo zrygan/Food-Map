@@ -46,7 +46,7 @@ def compute_g(current_node, neighbor, g_values, graph):
         g: The g value for the neighbor node.
     """
     # Assuming graph.get_edge_weight() returns the weight of the edge between two nodes
-    edge_weight = graph.get_edge_weight(current_node, neighbor)
+    edge_weight = graph.weights[(current_node, neighbor)]
     
     # g(neighbor) = g(current_node) + weight(current_node, neighbor)
     return g_values[current_node] + edge_weight
@@ -86,12 +86,12 @@ def a_star(graph, start_index, goals):
         #4. Select node w/ lowest f value from open_list. Set this as current node
         #   (Recall f = g + h, where g = sum of actual weight from start to current node & h = heuristic value)
         current = open_list.pop()[0][0] #only returns the key since this returns a tuple (key, index)
-        print(current)
+        #print("Current node: " + current)
         #5. If current node is goal node:
         if current in goals:
             found_goal = goals[goals.index(current)]
         #6. Stop algorithm, trace_path() and return the path and total cost
-            return trace_path(), g_values[current]
+            return trace_path(parent_list, start_index, found_goal), g_values[current]
         #7. Else:
         else:
             #8. Add current node to closed_list
@@ -102,7 +102,7 @@ def a_star(graph, start_index, goals):
                 if neighbor in closed_list:
                     continue
                 # 12. Compute its g value (using compute_g())
-                g = compute_g()
+                g = compute_g(current, neighbor, g_values, graph)
                 # 11. If the neighbor is not in open_list:
                 if not open_list.__contains__(neighbor):
                     #13. Get its h value
