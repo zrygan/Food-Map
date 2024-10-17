@@ -75,6 +75,8 @@ if __name__ == "__main__":
     graph.give_heuristic(heuristics)    # same for this
 
     a_star_result = a.a_star(graph, start_node, goal_node)
+    print("Expected Path: ['A', 'F', 'G', 'I', 'J']\nExpected Cost: 10\n")
+    print("A*")
     print("Path: ", a_star_result[0], "\nCost: ", a_star_result[1])
     graph.view()
 
