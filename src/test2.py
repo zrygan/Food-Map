@@ -4,6 +4,7 @@
 from imports import *
 from graph import *
 import a_star as a
+import ucs as u
 
 if __name__ == "__main__":
     """ the following variables can be changed for tesitng
@@ -67,12 +68,16 @@ if __name__ == "__main__":
     graph.give_weight(weights)
     graph.give_heuristic(heuristics)
 
+    ucs_path, ucs_cost = u.ucs(graph, start_node, goal_node[0]) 
     a_star_path, a_star_cost = a.a_star(graph, start_node, goal_node)
+
     print("Expected Path: ['A', 'B', 'D', 'E', 'G', 'H', 'I', 'J', 'K', 'M']\nExpected Cost: 135\n")
+
+    print("UCS")
+    print("Path: ", ucs_path, "\nCost: ", ucs_cost, "\n")
 
     print("A*")
     print("Path: ", a_star_path, "\nCost: ", a_star_cost)
     graph.view()
 
-
-    print("Done")
+    print("\nDone")
