@@ -19,20 +19,20 @@ class Graph:
         self.weights = {}
         self.heuristic = {}
 
-    def make(self, nodes: list[str], edges: list[tuple[str, str]]):
-        """Creates the Graph object by adding the nodes and edges to it.
+    def make(self, vertices: list[int], edges: list[tuple[int, int]]) -> None:
+        """Creates the Graph object by adding the vertices and edges to it.
 
         Args:
-            nodes (list[str]): the array of nodes in G
-            edges (list[tuple[str, str]]): the array of ordered pairs of nodes
+            vertices (list[int]): the array of vertices in G
+            edges (list[tuple[int, int]]): the array of ordered pairs of vertices
         """
-        self.G.add_nodes_from(nodes)
+        self.G.add_nodes_from(vertices)
         self.G.add_edges_from(edges)
-        
-        self.vertices = nodes
+
+        self.vertices = vertices
         self.edges = edges
 
-    def give_weight(self, weights: list[float]):
+    def give_weight(self, weights: list[float]) -> None:
         """Gives the weight of each edge in the graph.
 
         Args:
@@ -43,16 +43,16 @@ class Graph:
         """
         if len(weights) > 0 and len(weights) != len(self.edges):
             raise ValueError("Number of weights MUST BE equal to the number of edges.")
-        
+
         for edge, weight in zip(self.edges, weights):
-            self.G[edge[0]][edge[1]]['weight'] = weight
+            self.G[edge[0]][edge[1]]["weight"] = weight
             self.weights[edge] = weight
 
-    def give_heuristic(self, heuristics: dict[str, float]):
+    def give_heuristic(self, heuristics: dict[int, float]) -> None:
         """Gives the heuristics value of each vertex in the graph.
 
         Args:
-            heuristics (dict[str, float]): a dictionary of vertices and their heuristic values.
+            heuristics (dict[int(value, base), float]): a dictionary of vertices and their heuristic values.
 
         Raises:
             ValueError: If a vertex is not found in the graph.
@@ -63,6 +63,42 @@ class Graph:
             else:
                 raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
 
+    def view(self) -> None:
+        """View the plot as a UI."""
+        positions = nx.spring_layout(self.G)
+        nx.draw(
+            self.G,
+            positions,
+            with_labels=True,
+            node_color="black",
+            node_size=700,
+            font_size=8,
+            font_color="white",
+            edge_color="black",
+        )
+        plt.title("Graph of Food Map")
+
+        # Show heuristic values beside each vertex
+        if self.heuristic:
+            heuristic_labels = {vertex: self.heuristic[vertex] for vertex in self.heuristic}
+            offset = 0.15
+            heuristic_label_positions = {
+                vertex: (pos[0], pos[1] + offset) for vertex, pos in positions.items()
+            }
+            nx.draw_networkx_labels(
+                self.G,
+                heuristic_label_positions,
+                labels=heuristic_labels,
+                font_color="blue",
+            )
+
+        # Show weights of each edge beside it
+        if self.weights:
+            edge_labels = nx.get_edge_attributes(self.G, "weight")
+            nx.draw_networkx_edge_labels(self.G, positions, edge_labels=edge_labels)
+
+        plt.show()
+    
     def get_neighbors(self, vertex: str):
         """Returns an iterator containing the neighbors of a given vertex.
 
@@ -76,24 +112,3 @@ class Graph:
             return self.G.neighbors(vertex)
         else:
             raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
-
-    def view(self):
-        """View the plot as a UI."""
-        positions = nx.spring_layout(self.G)
-        nx.draw(self.G, positions, with_labels=True, node_color='black', 
-                node_size=700, font_size=8, font_color='white', edge_color='black')
-        plt.title("Graph of Food Map")
-
-        # Show heuristic values beside each node
-        if self.heuristic:
-            heuristic_labels = {node: self.heuristic[node] for node in self.heuristic}
-            offset = 0.15
-            heuristic_label_positions = {node: (pos[0], pos[1] + offset) for node, pos in positions.items()}
-            nx.draw_networkx_labels(self.G, heuristic_label_positions, labels=heuristic_labels, font_color='blue')
-
-        # Show weights of each edge beside it
-        if self.weights:
-            edge_labels = nx.get_edge_attributes(self.G, 'weight')
-            nx.draw_networkx_edge_labels(self.G, positions, edge_labels=edge_labels)
-
-        plt.show()
