@@ -4,6 +4,8 @@
 from imports import *
 
 class Graph:
+    vertices = None
+
     def __init__(self, num_edges: int, num_vertex: int) -> None:
         """Initialize the Graph object using nx.
 
@@ -57,7 +59,7 @@ class Graph:
         Raises:
             ValueError: If a vertex is not found in the graph.
         """
-        for vertex, heuristic in heuristics:
+        for vertex, heuristic in heuristics.items():
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
             else:
