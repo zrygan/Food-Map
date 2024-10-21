@@ -65,33 +65,32 @@ class Graph:
             else:
                 raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
 
-    def view(self, path: list[int]=None) -> None:
+    def view(self, path: list[int]=None, start_node: int=None, end_node: int=None) -> None:
         """View the plot as a UI.
 
         Args:
             path (list[int], optional): the list of the algorithm traversal. Defaults to None.
+            start_node (int, optional): the start node. Defaults to None.
+            end_node (int, optional): the end node. Defaults to None.
         """
-        # Create a Tkinter window
-        window = tk.Tk()
-        window.title("Graph Visualization")
-
-        # Create a frame for the plot
-        plot_frame = Frame(window)
-        plot_frame.pack(side="left", padx=10, pady=10)
-
         # Create a figure for the plot
         fig, ax = plt.subplots()
 
         # Draw the graph
         positions = nx.spring_layout(self.G)
 
-        if path is None:
-            node_color = ["black" for node in self.G.nodes]
-            edge_color = ["black" for u, v in self.G.edges]
-        else:
-            node_color = ["red" if node in path else "black" for node in self.G.nodes]
-            edge_color = ["darkred" if (u in path and v in path) else "black" for u, v in self.G.edges]
+        node_color = []
+        for node in self.G.nodes:
+            if node == start_node:
+                node_color.append("green")
+            elif node == end_node:
+                node_color.append("darkred")
+            elif path and node in path:
+                node_color.append("red")
+            else:
+                node_color.append("grey")
 
+        edge_color = ["darkred" if path and (u in path and v in path) else "black" for u, v in self.G.edges]
 
         nx.draw(
             self.G,
@@ -126,32 +125,7 @@ class Graph:
             edge_labels = nx.get_edge_attributes(self.G, "weight")
             nx.draw_networkx_edge_labels(self.G, positions, edge_labels=edge_labels, ax=ax)
 
-        # TODO: Add input for start index
-        # TODO: Add input for end index
-        # TODO: Add input for type of Algorithm
-        
-        # Add the plot as a Tkinter window
-        canvas = FigureCanvasTkAgg(fig, master=plot_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
-
-        # Add the tool bar        
-        toolbar_frame = Frame(window)
-        toolbar_frame.pack(side="top", fill="x")
-        toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
-        toolbar.update()
-        canvas._tkcanvas.pack(side="top", fill="both", expand=True)
-
-        # Add a sidebar for the legends
-        legend_frame = Frame(window)
-        legend_frame.pack(side="right", padx=10, pady=10)
-        for node in self.G.nodes:
-            # TODO: add the node number before each legend
-            label_text = f"{node}: {self.vertices.get(node)}"
-            label = Label(legend_frame, text=label_text, fg="black") 
-            label.pack(anchor="w")
-
-        window.mainloop()
+        plt.show()
     
     def get_neighbors(self, vertex: int) -> None:
         """Returns an iterator containing the neighbors of a given vertex.
