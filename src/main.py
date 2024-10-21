@@ -80,5 +80,4 @@ if __name__ == "__main__":
     graph.make(vertices, edges)
     graph.give_weight(weights)
     graph.give_heuristic(heuristics)
-    # graph.remove_edge((2,3))
-    graph.view() 
+    graph.view()

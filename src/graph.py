@@ -153,7 +153,7 @@ class Graph:
 
         window.mainloop()
     
-    def get_neighbors(self, vertex: str) -> None:
+    def get_neighbors(self, vertex: int) -> None:
         """Returns an iterator containing the neighbors of a given vertex.
 
             Args:
@@ -258,14 +258,27 @@ class Graph:
                 self.edges.append(edge_to_remove)
                 self.G.add_edge(edge_to_remove[0], edge_to_remove[1])
 
-def dfs(graph:Graph, vertex: int, visited:set[int]) -> None:
-    """A depth-first search implementation (dfs)
+def dfs(graph: Graph, vertex: int, visited: set[int], goal_node: int = None) -> bool:
+    """A depth-first search implementation (DFS).
+    Has an optional feature to use for searching a goal node.
 
     Args:
-        vertex (int): _description_
-        visited (list[int]): _description_
+        graph (Graph): The graph to traverse.
+        vertex (int): The current vertex to visit.
+        visited (set[int]): A set to track visited vertices.
+        goal_node (int, optional): The target node to search for. Defaults to None.
+
+    Returns:
+        bool: True if the goal node is found, False otherwise.
     """
     visited.add(vertex)
-    for neighbor in graph.get_neighbors(vertex):
+
+    if vertex == goal_node:
+        return True
+    
+    for neighbor in sorted(graph.get_neighbors(vertex)):
         if neighbor not in visited:
-            dfs(graph, neighbor, visited)
+            if dfs(graph, neighbor, visited, goal_node):
+                return True
+
+    return False
