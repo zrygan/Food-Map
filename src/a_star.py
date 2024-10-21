@@ -41,7 +41,8 @@ def compute_g(current_node, neighbor, g_values, graph):
     """
     # Assuming graph.get_edge_weight() returns the weight of the edge between two nodes
     edge_weight = graph.weights.get((current_node, neighbor))
-    
+    if edge_weight is None:
+        return None
     # g(neighbor) = g(current_node) + weight(current_node, neighbor)
     return g_values[current_node] + edge_weight
 
@@ -101,6 +102,8 @@ def a_star(graph, start_index, goal_index):
                     continue
                 # 12. Compute its g value (using compute_g())
                 g = compute_g(current, neighbor, g_values, graph)
+                if g is None:
+                    continue
                 # 11. If the neighbor is not in open_list:
                 if not open_list.__contains__(neighbor):
                     #13. Get its h value
@@ -122,5 +125,5 @@ def a_star(graph, start_index, goal_index):
                         open_list.update(neighbor, f)
                         parent_list[neighbor] = current
     #18. If the open list is empty: The goal is unreachable; return failure.
-    return None, 0
+    return None, None
     #Ref: https://www.geeksforgeeks.org/a-search-algorithm-in-python/
