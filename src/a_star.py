@@ -1,10 +1,6 @@
-# work in progress ! ! ! also to be tested
-
 from imports import IndexedPriorityQueue
 
-#To be tested --Thara
 def trace_path(parent_list, start, goal):
-    # should use parent_list
     """
     Traces the shortest path from the start (root) node to the goal node using the parent_list.
     
@@ -31,8 +27,6 @@ def trace_path(parent_list, start, goal):
     return path
 
 def compute_g(current_node, neighbor, g_values, graph):
-    # should use g_values list
-    # you can apply dynamic programming!!
     """
     Computes the g value (cost from start to the current node) for the neighbor.
     
@@ -46,25 +40,30 @@ def compute_g(current_node, neighbor, g_values, graph):
         g: The g value for the neighbor node.
     """
     # Assuming graph.get_edge_weight() returns the weight of the edge between two nodes
-    edge_weight = graph.weights[(current_node, neighbor)]
+    edge_weight = graph.weights.get((current_node, neighbor))
     
     # g(neighbor) = g(current_node) + weight(current_node, neighbor)
     return g_values[current_node] + edge_weight
 
-def a_star(graph, start_index, goals):
-    #ill rewrite this later xp
-    """Executes the A* algorithm and returns an optimal path from start node to goal node.
+def a_star(graph, start_index, goal_index):
+    """
+        Executes the A* algorithm and returns an optimal path and cost from start node to goal node.
 
         Args:
-            graph: given graph
-            start_index: starting index
-            goals: list of goal nodes (cus there might be multiple goals)
+            graph: The given graph.
+            start_index: The index of the starting vertex of the algorithm.
+            goals: A list of indices of the goal nodes.
         Raises:
-
+            AttributesError: If the graph has no vertices.
+            KeyError: If either the start index or the goal index is not in the graph.
     """
     #make sure the parameters are valid
-    if len(graph.vertices) < 1 or start_index not in graph.vertices or any(index not in graph.vertices for index in goals):
-        return None
+    if len(graph.vertices) < 1:
+        raise AttributeError(f"Graph {graph} has no vertices")
+    elif start_index not in graph.vertices:
+        raise KeyError(f"Vertex {start_index} is not in the graph {graph}.")
+    elif goal_index not in graph.vertices:
+        raise KeyError(f"One of the goals in {goal_index} is not found in the graph {graph}")
 
     #A* algorithm pseudocode
 
@@ -84,20 +83,19 @@ def a_star(graph, start_index, goals):
     #3. While open_list is not empty:
     while len(open_list) > 0:
         #4. Select node w/ lowest f value from open_list. Set this as current node
-        #   (Recall f = g + h, where g = sum of actual weight from start to current node & h = heuristic value)
-        current = open_list.pop()[0][0] #only returns the key since this returns a tuple (key, index)
-        #print("Current node: " + current)
+        current = open_list.pop()[0]
+        # print("Current node: ", current)
         #5. If current node is goal node:
-        if current in goals:
-            found_goal = goals[goals.index(current)]
+        if current == goal_index:
         #6. Stop algorithm, trace_path() and return the path and total cost
-            return trace_path(parent_list, start_index, found_goal), g_values[current]
+            return trace_path(parent_list, start_index, goal_index), g_values[current]
         #7. Else:
         else:
             #8. Add current node to closed_list
             closed_list.add(current)
             #9. For each neighbor of the current node:
             for neighbor in graph.get_neighbors(current):
+                #print("    current neighbor:", neighbor)
                 #10. If the neighbor is in closed_list, skip
                 if neighbor in closed_list:
                     continue
@@ -124,5 +122,5 @@ def a_star(graph, start_index, goals):
                         open_list.update(neighbor, f)
                         parent_list[neighbor] = current
     #18. If the open list is empty: The goal is unreachable; return failure.
-    return None
+    return None, 0
     #Ref: https://www.geeksforgeeks.org/a-search-algorithm-in-python/
