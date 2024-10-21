@@ -81,14 +81,11 @@ class GraphManager:
                 "success_message": "Edge deleted."
             }
         }
-    
-    def initialize_vertices(self) -> dict[int, str]:
-        """Initializes the vertices
 
-        Returns:
-            dict[int, str]: the vertices (a dictionary)
+    def make(self) -> None:
+        """initializes the graph using the rules established
         """
-        return {
+        vertices = {
             1: "University Mall",
             2: "Mcdonald's",
             3: "Perico's",
@@ -110,12 +107,8 @@ class GraphManager:
             19: "Leon Guinto St.",
             20: "P. Ocampo St.",
             21: "Fidel A. Reyes St.",
-        } 
-
-    def make(self) -> None:
-        """initializes the graph using the rules established
-        """
-        vertices = self.initialize_vertices()
+        }
+        
         edges = [
             (21, 10),
             (10, 11),
@@ -141,14 +134,30 @@ class GraphManager:
             (3, 1)
         ]
         weights = []  
-        
-        for i in range(len(edges)):
-            weights.append(i)
             
-        heuristics = {}
-        
-        for i in range(len(vertices)):
-            heuristics[list(vertices.keys())[i]] = i
+        heuristics = {
+            1: 3.9,
+            2: 4.2,
+            3: 4.0,
+            4: 4.5,
+            5: 4.2,
+            6: 3.0,
+            7: 3.4,
+            8: 4.2,
+            9: 3.8,
+            10: 4.0,
+            11: 4.1,
+            12: 3.7,
+            13: 4.1,
+            14: 4.1,
+            15: 2.0,
+            16: 2.5,
+            17: 3.0,
+            18: 4.5,
+            19: 3.0,
+            20: 2.9,
+            21: 2.5
+        }
 
         self.graph = Graph(len(edges), len(vertices))
         self.graph.make(vertices, edges)
