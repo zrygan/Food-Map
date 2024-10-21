@@ -74,12 +74,11 @@ if __name__ == "__main__":
     heuristics = []
 
     start_node = vertices[start_index]
-    # goal_node = edges[goal_index] #FIXME: this is an error since edges is NOT a dict, it is a list/array
+    goal_node = edges[goal_index] 
 
     graph = Graph(len(edges), len(vertices))
     graph.make(vertices, edges)
     graph.give_weight(weights)
     graph.give_heuristic(heuristics)
-    graph.remove_vertex(21)
-    graph.view([1,2,3,4,5])
-    
+    # graph.remove_edge((2,3))
+    graph.view() 

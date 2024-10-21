@@ -85,8 +85,13 @@ class Graph:
         # Draw the graph
         positions = nx.spring_layout(self.G)
 
-        node_color = ["red" if node in path else "black" for node in self.G.nodes]
-        edge_color = ["darkred" if (u in path and v in path) else "black" for u, v in self.G.edges]
+        if path is None:
+            node_color = ["black" for node in self.G.nodes]
+            edge_color = ["black" for u, v in self.G.edges]
+        else:
+            node_color = ["red" if node in path else "black" for node in self.G.nodes]
+            edge_color = ["darkred" if (u in path and v in path) else "black" for u, v in self.G.edges]
+
 
         nx.draw(
             self.G,
@@ -141,9 +146,9 @@ class Graph:
         legend_frame = Frame(window)
         legend_frame.pack(side="right", padx=10, pady=10)
         for node in self.G.nodes:
-            color = "red" if node in path else "black"
             # TODO: add the node number before each legend
-            label = Label(legend_frame, text=self.vertices[node], fg=color) 
+            label_text = f"{node}: {self.vertices.get(node)}"
+            label = Label(legend_frame, text=label_text, fg="black") 
             label.pack(anchor="w")
 
         window.mainloop()
@@ -162,7 +167,7 @@ class Graph:
         else:
             raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
     
-    def remove_vertex(self, vertex_to_remove: int):
+    def remove_vertex(self, vertex_to_remove: int) -> None:
         """removes a vertex from the graph and adjusts all graph logistics to fit the node removal.
 
         Args:
@@ -193,13 +198,74 @@ class Graph:
                     edges_copy.append(edge)
 
             self.edges = edges_copy
-            print(self.edges)
             del self.vertices[vertex_to_remove]
 
             self.G.clear()
             self.G.add_edges_from(self.edges)
             self.G.add_nodes_from(self.vertices)
             
-        # TODO: Add remove_edge
-        # TODO: Add add_edge
-        # TODO: Add add_vertex
+    def add_vertex(self, vertex_to_add: int, edges_to_add: tuple[int,int], new_vertex_name: str=None) -> None:
+        new_vertex_checker = any(vertex_to_add in edge for edge in edges_to_add)
+        not_dupe_checker = any(vertex_to_add != vertex for vertex in self.vertices.keys())
+        
+
+        if new_vertex_checker and not_dupe_checker:
+            if new_vertex_name is None:
+                new_vertex_name = "new_vertex_" + str(vertex_to_add)
+            
+            self.G.add_node(vertex_to_add)
+            self.vertices[vertex_to_add] = new_vertex_name
+            self.G.add_edges_from(edges_to_add)
+            self.edges.append(edges_to_add)
+            
+    def add_edge(self, edges_to_add: tuple[int,int]) -> None:
+        for edge in edges_to_add:
+            if edge not in self.edges and edge[::-1] not in self.edges:
+                self.G.add_edge(edge[0], edge[1])
+                self.edges.append(edge)
+                
+    def remove_edge(self, edge_to_remove: tuple[int,int]) -> None:
+        """algorithm for edge removal.
+        Consideration:
+            We want to maintain graph connectivity such that 
+            removing some edge v from g does not result in two
+            separate graphs g1 and g2. edge(g[v]) => g1, g2. 
+        
+        This is done through a dfs algorithm implementation.
+
+        Args:
+            edge_to_remove (tuple[int,int]): the edge to remove from the graph
+        """
+        def verification() -> bool:
+            """verifies if the graph is still a connected graph.
+            Uses dfs from `dfs.py`.
+
+            Returns:
+                bool: returns true if the graph is a connected graph, false otherwise
+            """
+            visited = set()
+            
+            s = next(iter(self.vertices))
+            dfs(self,s,visited)
+            
+            return len(visited) == len(self.vertices)
+        
+        if edge_to_remove in self.edges or (edge_to_remove[1],edge_to_remove[0]) in self.edges:
+            self.edges.remove(edge_to_remove)
+            self.G.remove_edge(edge_to_remove[0], edge_to_remove[1])
+            
+            if not verification():
+                self.edges.append(edge_to_remove)
+                self.G.add_edge(edge_to_remove[0], edge_to_remove[1])
+
+def dfs(graph:Graph, vertex: int, visited:set[int]) -> None:
+    """A depth-first search implementation (dfs)
+
+    Args:
+        vertex (int): _description_
+        visited (list[int]): _description_
+    """
+    visited.add(vertex)
+    for neighbor in graph.get_neighbors(vertex):
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
