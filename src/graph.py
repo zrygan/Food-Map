@@ -4,7 +4,8 @@
 from imports import *
 
 class Graph:
-    vertices = None
+    """A graph object
+    """
 
     def __init__(self, num_edges: int, num_vertex: int) -> None:
         """Initialize the Graph object using nx.
@@ -39,9 +40,6 @@ class Graph:
 
         Args:
             weights (list[float]): an array of floats that is the weight of each edge.
-
-        Raises:
-            ValueError: If the number of weights does not match the number of edges.
         """
         if len(weights) > 0 and len(weights) != len(self.edges):
             raise ValueError("Number of weights MUST BE equal to the number of edges.")
@@ -55,15 +53,10 @@ class Graph:
 
         Args:
             heuristics (dict[int(value, base), float]): a dictionary of vertices and their heuristic values.
-
-        Raises:
-            ValueError: If a vertex is not found in the graph.
         """
         for vertex, heuristic in heuristics:
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
-            else:
-                raise ValueError(f"The vertex {vertex} NOT FOUND in the Graph.")
 
     def view(self, path: list[int]=None, start_node: int=None, end_node: int=None) -> None:
         """View the plot as a UI.
@@ -179,6 +172,13 @@ class Graph:
             self.G.add_nodes_from(self.vertices)
             
     def add_vertex(self, vertex_to_add: int, edges_to_add: tuple[int,int], new_vertex_name: str=None) -> None:
+        """adds a vertex to the graph
+
+        Args:
+            vertex_to_add (int): the vertex to add
+            edges_to_add (tuple[int,int]): an edge to add to maintain the connectivity of the graph
+            new_vertex_name (str, optional): the name or title of the vertex. Defaults to None.
+        """
         new_vertex_checker = any(vertex_to_add in edge for edge in edges_to_add)
         not_dupe_checker = any(vertex_to_add != vertex for vertex in self.vertices.keys())
         
@@ -193,8 +193,13 @@ class Graph:
             self.edges.append(edges_to_add)
             
     def add_edge(self, edges_to_add: tuple[int,int]) -> None:
+        """adds an edge
+
+        Args:
+            edges_to_add (tuple[int,int]): the edge to add
+        """
         for edge in edges_to_add:
-            if edge not in self.edges and edge[::-1] not in self.edges:
+            if edge not in self.edges and (edge[1], edge[0]) not in self.edges:
                 self.G.add_edge(edge[0], edge[1])
                 self.edges.append(edge)
                 
