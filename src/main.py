@@ -1,7 +1,9 @@
 # main
 # contains the main function for the project
 
-from graph import Graph
+from graph import *
+from ucs import *
+from a_star import *
 from imports import *
 from colorama import Fore, Style, init
 
@@ -18,74 +20,64 @@ class GraphManager:
         self.start_index = -1
         self.goal_index = -1
         self.commands = {
-            "make rules": {
-                "function": self.using_rules,
-                "description": "Initialize the graph using predefined rules.",
+            "make": {
+                "function": self.make,
+                "description": "Initialize the graph using predefined rules. Input format: make",
                 "success_message": "Graph initialized using rules."
             },
             "exit": {
                 "function": lambda: False,
-                "description": "Exit the program.",
+                "description": "Exit the program. Input format: exit",
                 "success_message": "Exiting program."
             },
             "set start": {
                 "function": self.set_start_index,
-                "description": "Set the start index to the specified number.",
+                "description": "Set the start index to the specified number. Input format: set start <number>",
                 "success_message": "Start index set."
             },
             "set goal": {
                 "function": self.set_goal_index,
-                "description": "Set the goal index to the specified number.",
+                "description": "Set the goal index to the specified number. Input format: set goal <number>",
                 "success_message": "Goal index set."
             },
             "view": {
                 "function": self.view_graph,
-                "description": "View the current graph.",
+                "description": "View the current graph. Input format: view",
                 "success_message": "Graph viewed."
             },
-            "view se": {
-                "function": self.view_start_end,
-                "description": "View the graph with start and end vertices highlighted.",
-                "success_message": "Graph viewed with start and end vertices highlighted."
-            },
-            "view res": {
+            "view result": {
                 "function": self.view_result,
-                "description": "View the graph with the result of the algorithm as the path.",
-                "success_message": "Graph viewed with algorithm result."
-            },
-            "view all": {
-                "function": self.view_all,
-                "description": "View the graph with start, end vertices, and the result of the algorithm as the path.",
+                "description": "View the graph with start, end vertices, and the result of the algorithm as the path. Input format: view result <algorithm>",
                 "success_message": "Graph viewed with start, end vertices, and algorithm result."
             },
             "show start": {
                 "function": self.show_start,
-                "description": "Show the current start index.",
+                "description": "Show the current start index. Input format: show start",
                 "success_message": "Start index shown."
             },
             "show goal": {
                 "function": self.show_goal,
-                "description": "Show the current goal index.",
+                "description": "Show the current goal index. Input format: show goal",
                 "success_message": "Goal index shown."
             },
             "add vertex": {
                 "function": self.add_vertex,
-                "description": "Add a vertex to the graph.",
+                "description": "Add a vertex to the graph. Input format: add vertex <number>",
                 "success_message": "Vertex added."
             },
             "del vertex": {
                 "function": self.del_vertex,
-                "description": "Delete a vertex from the graph.",
+                "description": "Delete a vertex from the graph. Input format: del vertex <number>",
                 "success_message": "Vertex deleted."
             },
             "add edge": {
                 "function": self.add_edge,
-                "description": "Add an edge to the graph.",
+                "description": "Add an edge to the graph. Input format: add edge <u> <v>",
                 "success_message": "Edge added."
             },
             "del edge": {
                 "function": self.del_edge,
-                "description": "Delete an edge from the graph.",
+                "description": "Delete an edge from the graph. Input format: del edge <u> <v>",
                 "success_message": "Edge deleted."
             }
         }
@@ -120,7 +112,7 @@ class GraphManager:
             21: "Fidel A. Reyes St.",
         } 
 
-    def using_rules(self) -> None:
+    def make(self) -> None:
         """initializes the graph using the rules established
         """
         vertices = self.initialize_vertices()
@@ -148,9 +140,15 @@ class GraphManager:
             (2, 3),
             (3, 1)
         ]
-                
-        weights = []
-        heuristics = []
+        weights = []  
+        
+        for i in range(len(edges)):
+            weights.append(i)
+            
+        heuristics = {}
+        
+        for i in range(len(vertices)):
+            heuristics[list(vertices.keys())[i]] = i
 
         self.graph = Graph(len(edges), len(vertices))
         self.graph.make(vertices, edges)
@@ -215,7 +213,7 @@ class GraphManager:
                 v = int(input("edge: ").strip())
                 self.graph.vertices[vertex] = name
                 self.graph.G.add_node(vertex)
-                self.add_edge(99, v)
+                self.add_edge(vertex, v)
                 print(f"\nVertex {vertex} with name '{name}' added.")
             else:
                 print(f"Vertex {vertex} already exists.")
@@ -230,9 +228,7 @@ class GraphManager:
             print("Graph is not initialized. Please initialize the graph first.")
         else:
             if vertex in self.graph.vertices:
-                del self.graph.vertices[vertex]
-                self.graph.G.remove_node(vertex)
-                self.graph.edges = [edge for edge in self.graph.edges if vertex not in edge]
+                self.graph.remove_vertex(vertex)
                 print(f"Vertex {vertex} removed.")
             else:
                 print(f"Vertex {vertex} does not exist.")
@@ -301,31 +297,9 @@ class GraphManager:
             print("Graph is not initialized.")
         else:
             self.print_vertices()
-            self.graph.view()
-
-    def view_start_end(self):
-        """View the graph where the start and goal are highlighted
-        """
-        if not self.graph or not self.graph.vertices:
-            print("Graph is not initialized.")
-        else:
-            self.print_vertices()
             self.graph.view(start_node=self.start_index, end_node=self.goal_index)
 
     def view_result(self, algorithm:str):
-        """Vuew the graph where the best path of the algorithm is highlighted
-
-        Args:
-            algorithm (str): the algorithm to run
-        """
-        if not self.graph or not self.graph.vertices:
-            print("Graph is not initialized.")
-        else:
-            path = self.run_algorithm(algorithm)
-            self.print_vertices(path=path)
-            self.graph.view(path=path)
-
-    def view_all(self, algorithm:str):
         """View the graph with all decorations
 
         Args:
@@ -334,28 +308,35 @@ class GraphManager:
         if not self.graph or not self.graph.vertices:
             print("Graph is not initialized.")
         else:
-            path = self.run_algorithm(algorithm)
-            self.print_vertices(path=path)
-            self.graph.view(path=path, start_node=self.start_index, end_node=self.goal_index)
-
-    def run_algorithm(self, algorithm:str) -> list[int]:
-        """Runs the algorithm
-
-        Args:
-            algorithm (str): the algorithm to run
-
-        Returns:
-            list[int]: the list of vertices (the best path) 
-        """
-        if algorithm.lower() == "ucs":
-            pass # TODO: ADD THE ALGORITHM HERE
-        elif algorithm.lower() == "a*":
-            pass # TODO: ADD THE ALGORITHM HERE
-        elif algorithm.lower() == "dfs":
-            pass # TODO: ADD THE ALGORITHM HERE
-        else:
-            print(f"Unknown algorithm: {algorithm}")
-            return []
+            algorithm = algorithm.lower()
+            if algorithm == "dfs":
+                visited = set()
+                dfs(self.graph, self.start_index, visited, self.goal_index)
+                visited = list(visited)
+                
+                # output
+                self.print_vertices(visited)
+                print("Path:", visited)
+                self.graph.view(visited, self.start_index, self.goal_index)
+            
+            elif algorithm == "ucs":
+                path, cost = ucs(self.graph, self.start_index, self.goal_index)
+                
+                #output
+                self.print_vertices(path)
+                print("Path:", path)
+                print("Path:", cost)
+                self.graph.view(path, self.start_index, self.goal_index)
+            elif algorithm == "a*":
+                path, cost = a_star(self.graph, self.start_index, self.goal_index)
+                
+                #output
+                self.print_vertices(path)
+                print("Path:", path)
+                print("Path:", cost)
+                self.graph.view(path, self.start_index, self.goal_index) 
+            else:
+                print("Invalid comamnd. Unknown algorithm", algorithm)
 
     def update_loop(self) -> None:
         """The main program loop
@@ -388,20 +369,13 @@ class GraphManager:
                 except (IndexError, ValueError):
                     self.commands["set goal"]["function"]()
                     print("Invalid command. Usage: set goal <number>")
-            elif choice.startswith("view res "):
+            elif choice.startswith("view result "):
                 try:
                     algorithm = choice.split()[2]
-                    self.commands["view res"]["function"](algorithm)
-                    print(self.commands["view res"]["success_message"])
+                    self.commands["view result"]["function"](algorithm)
+                    print(self.commands["view result"]["success_message"])
                 except (IndexError, ValueError):
-                    print("Invalid command. Usage: view res <algorithm>")
-            elif choice.startswith("view all "):
-                try:
-                    algorithm = choice.split()[2]
-                    self.commands["view all"]["function"](algorithm)
-                    print(self.commands["view all"]["success_message"])
-                except (IndexError, ValueError):
-                    print("Invalid command. Usage: view all <algorithm>")
+                    print("Invalid command. Usage: view result <algorithm>")
             elif choice.startswith("add vertex "):
                 try:
                     vertex = int(choice.split()[2])
@@ -433,7 +407,7 @@ class GraphManager:
             elif choice == "?":
                 print("Available commands:")
                 for command, details in self.commands.items():
-                    print(f"{Fore.LIGHTYELLOW_EX}{command}: {details['description']}")
+                    print(f"{Fore.LIGHTYELLOW_EX}{command}{Fore.WHITE} : {details['description']}")
             else:
                 print("Invalid command. Please type ? for commands.")  
 

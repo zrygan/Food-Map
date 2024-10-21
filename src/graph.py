@@ -54,7 +54,7 @@ class Graph:
         Args:
             heuristics (dict[int(value, base), float]): a dictionary of vertices and their heuristic values.
         """
-        for vertex, heuristic in heuristics:
+        for vertex, heuristic in heuristics.items():
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
 
@@ -101,7 +101,7 @@ class Graph:
         # Show heuristic values beside each vertex
         if self.heuristic:
             heuristic_labels = {vertex: self.heuristic[vertex] for vertex in self.heuristic}
-            offset = 0.15
+            offset = 0.05
             heuristic_label_positions = {
                 vertex: (pos[0], pos[1] + offset) for vertex, pos in positions.items()
             }
