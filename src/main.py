@@ -243,8 +243,10 @@ class GraphManager:
             if vertex not in self.graph.vertices:
                 name = input("name: ").strip()
                 v = int(input("edge: ").strip())
+                heuristic = int(input("heuristic: "))
                 self.graph.vertices[vertex] = name
                 self.graph.G.add_node(vertex)
+                self.graph.add_change_heuristic(vertex, heuristic)
                 self.add_edge(vertex, v)
                 print(f"\nVertex {vertex} with name '{name}' added.")
             else:
@@ -261,25 +263,31 @@ class GraphManager:
         else:
             if vertex in self.graph.vertices:
                 self.graph.remove_vertex(vertex)
+                if vertex in self.graph.heuristic:
+                    del self.graph.heuristic[vertex]
                 print(f"Vertex {vertex} removed.")
             else:
                 print(f"Vertex {vertex} does not exist.")
 
     def add_edge(self, u: int, v: int):
-        """Adds an edge in the graph
+        """Adds an edge to the graph
 
         Args:
-            u (int): the first component
-            v (int): the second component
+            u (int): the first vertex
+            v (int): the second vertex
         """
-        if not self.graph:
-            print("Graph is not initialized. Please initialize the graph first.")
+        edge = (u, v)
+        rev_edge = (v, u)
+        
+        if edge not in self.graph.edges and rev_edge not in self.graph.edges:
+            weight = float(input("weight: ").strip())
+            self.graph.edges.append(edge)
+            self.graph.G.add_edge(u, v, weight=weight)
+            self.graph.weights[edge] = weight
+            print(f"Edge {edge} added with weight {weight}.")
         else:
-            edge = (u, v)
-            if edge not in self.graph.edges and (v, u) not in self.graph.edges:
-                self.graph.edges.append(edge)
-                self.graph.G.add_edge(u, v)
-                print(f"Edge {edge} added.")
+            if rev_edge in self.graph.edges:
+                print(f"Edge {rev_edge} already exists. Redirecting to {edge}.")
             else:
                 print(f"Edge {edge} already exists.")
 
@@ -287,24 +295,28 @@ class GraphManager:
         """Deletes an edge in the graph
 
         Args:
-            u (int): the first component
-            v (int): the second component
+            u (int): the first vertex
+            v (int): the second vertex
         """
+        edge = (u, v)
+        rev_edge = (v, u)
+        
         if not self.graph:
             print("Graph is not initialized. Please initialize the graph first.")
+            return
+        
+        if edge in self.graph.edges:
+            self.graph.edges.remove(edge)
+            self.graph.G.remove_edge(u, v)
+            del self.graph.weights[edge]
+            print(f"Edge {edge} deleted.")
+        elif rev_edge in self.graph.edges:
+            self.graph.edges.remove(rev_edge)
+            self.graph.G.remove_edge(v, u)
+            del self.graph.weights[rev_edge]
+            print(f"Edge {rev_edge} deleted.")
         else:
-            edge = (u, v)
-            rev = (v, u)
-            if edge in self.graph.edges:
-                self.graph.edges.remove(edge)
-                self.graph.G.remove_edge(u, v)
-                print(f"Edge {edge} removed.")
-            elif rev in self.graph.edges:
-                self.graph.edges.remove(rev)
-                self.graph.G.remove_edge(v, u)
-                print(f"Edge {rev} removed.")
-            else:
-                print(f"Edge {edge} does not exist.")
+            print(f"Edge {edge} or {rev_edge} does not exist.")
 
     def print_vertices(self, path:list[int]=None):
         """Prints the vertices and adds color

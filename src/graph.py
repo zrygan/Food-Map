@@ -237,6 +237,27 @@ class Graph:
                 self.edges.append(edge_to_remove)
                 self.G.add_edge(edge_to_remove[0], edge_to_remove[1])
 
+    def add_change_heuristic(self, vertex: int, heuristic_to_add: float) -> None:
+        """Adds or changes a heuristic
+
+        Args:
+            vertex (int): the vertex to change or add a heuristic value
+            heuristic_to_add (float): the heuristic value
+        """
+        if vertex in self.vertices:
+            self.heuristic[vertex] = heuristic_to_add
+            
+    def add_change_edge(self, edge: tuple[int, int], weight: float) -> None:
+        """Adds or changes a weight for an edge
+
+        Args:
+            edge (tuple[int, int]): the edge
+            weight (float): the weight of this edge
+        """
+        if edge in self.edges or (edge[1], edge[0]) in self.edges:
+            self.G[edge[0]][edge[1]]["weight"] = weight
+            self.weights[edge] = weight    
+
 def dfs(graph: Graph, vertex: int, visited: set[int], goal_node: int = None) -> bool:
     """A depth-first search implementation (DFS).
     Has an optional feature to use for searching a goal node.
