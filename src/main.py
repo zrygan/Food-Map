@@ -131,8 +131,10 @@ class GraphManager:
             (20, 1),
             (1, 2),
             (2, 3),
-            (3, 1)
+            (3, 1),
+            # mirror of the edges
         ]
+        
         weights = [
             400,
             450,
@@ -157,6 +159,16 @@ class GraphManager:
             190,
             220
         ]  
+        
+        edge_weights = {edge: weight for edge, weight in zip(edges, weights)}
+        
+        for edge, weight in zip(edges,weights):
+            mirror = (edge[1], edge[0])
+            if mirror not in edge_weights:
+                edge_weights[mirror] = weight
+                
+        edges = list(edge_weights.keys())
+        weights = list(edge_weights.values())
             
         heuristics = {
             1: 3.9,
