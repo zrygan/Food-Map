@@ -76,6 +76,7 @@ def a_star(graph, start_index, goal_index):
 
     closed_list = set()
     open_list = IndexedPriorityQueue()
+    visited_nodes = []
     g_values = {start_index: 0}
     parent_list = {}
 
@@ -85,11 +86,12 @@ def a_star(graph, start_index, goal_index):
     while len(open_list) > 0:
         #4. Select node w/ lowest f value from open_list. Set this as current node
         current = open_list.pop()[0]
+        visited_nodes.append(current)
         # print("Current node: ", current)
         #5. If current node is goal node:
         if current == goal_index:
         #6. Stop algorithm, trace_path() and return the path and total cost
-            return trace_path(parent_list, start_index, goal_index), g_values[current]
+            return trace_path(parent_list, start_index, goal_index), g_values[current], visited_nodes
         #7. Else:
         else:
             #8. Add current node to closed_list
@@ -125,5 +127,5 @@ def a_star(graph, start_index, goal_index):
                         open_list.update(neighbor, f)
                         parent_list[neighbor] = current
     #18. If the open list is empty: The goal is unreachable; return failure.
-    return None, None
+    return None, None, None
     #Ref: https://www.geeksforgeeks.org/a-search-algorithm-in-python/

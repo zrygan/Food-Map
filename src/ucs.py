@@ -19,9 +19,12 @@ def ucs(graph, start, goal):
 
     costs = {start: 0} # costs of traversals, start is 0 since it doesn't cost anything
     # loop while there are still open vertices
+
+    visited_nodes = [] # to keep track of visited nodes
     
     while pq:
         current_vertex, current_cost = pq.pop() # get the vertex with the lowest cost
+        visited_nodes.append(current_vertex) # add node as visited
 
         # check if the goal vertex has been reached
         if current_vertex == goal:
@@ -33,7 +36,7 @@ def ucs(graph, start, goal):
                 current_vertex = predecessors[current_vertex]
     
             # return the path and its cost of traversal
-            return path, current_cost
+            return path, current_cost, visited_nodes
 
         # traverse the neighbors of the current vertex to check all options
         for neighbor in graph.get_neighbors(current_vertex):
