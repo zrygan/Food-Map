@@ -387,11 +387,12 @@ class GraphManager:
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
-                print("Path:", cost)
+                print("Cost:", cost)
                 self.graph.view(path, self.start_index, self.goal_index)
 
                 # TODO: Time complexity, will remove after testing !
-                execution_time = timeit.timeit(lambda: ucs(self.graph, self.start_index, self.goal_index), number = 1)  
+                execution_time = timeit.timeit(lambda: ucs(self.graph, self.start_index, self.goal_index), number = 10)  
+                execution_time /= 10
                 print(f"\nTime complexity: {execution_time:.10f} seconds")
 
                 # TODO: Memory complexity, will remove after testing !
@@ -410,7 +411,7 @@ class GraphManager:
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
-                print("Path:", cost)
+                print("Cost:", cost)
                 self.graph.view(path, self.start_index, self.goal_index) 
 
                 # TODO: Time complexity, will remove after testing !
