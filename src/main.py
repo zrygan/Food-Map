@@ -291,17 +291,20 @@ class GraphManager:
         edge = (u, v)
         rev_edge = (v, u)
         
-        if edge not in self.graph.edges and rev_edge not in self.graph.edges:
+        if edge not in self.graph.edges:
             weight = float(input("weight: ").strip())
             self.graph.edges.append(edge)
+            self.graph.edges.append(rev_edge)
+            
             self.graph.G.add_edge(u, v, weight=weight)
+            self.graph.G.add_edge(v, u, weight=weight)
+
             self.graph.weights[edge] = weight
+            self.graph.weights[rev_edge] = weight            
+
             print(f"Edge {edge} added with weight {weight}.")
         else:
-            if rev_edge in self.graph.edges:
-                print(f"Edge {rev_edge} already exists. Redirecting to {edge}.")
-            else:
-                print(f"Edge {edge} already exists.")
+            print(f"Edge {edge} already exists.")
 
     def del_edge(self, u: int, v: int):
         """Deletes an edge in the graph
@@ -311,24 +314,18 @@ class GraphManager:
             v (int): the second vertex
         """
         edge = (u, v)
-        rev_edge = (v, u)
         
         if not self.graph:
             print("Graph is not initialized. Please initialize the graph first.")
             return
         
         if edge in self.graph.edges:
-            self.graph.edges.remove(edge)
-            self.graph.G.remove_edge(u, v)
+            self.graph.remove_edge(edge)
             del self.graph.weights[edge]
+
             print(f"Edge {edge} deleted.")
-        elif rev_edge in self.graph.edges:
-            self.graph.edges.remove(rev_edge)
-            self.graph.G.remove_edge(v, u)
-            del self.graph.weights[rev_edge]
-            print(f"Edge {rev_edge} deleted.")
         else:
-            print(f"Edge {edge} or {rev_edge} does not exist.")
+            print(f"Edge {edge} does not exist.")
 
     def print_vertices(self, path:list[int]=None):
         """Prints the vertices and adds color
@@ -469,4 +466,12 @@ class GraphManager:
 
 if __name__ == "__main__":
     graph_manager = GraphManager()
-    graph_manager.update_loop()
+    # graph_manager.update_loop()
+    graph_manager.make()
+    graph_manager.add_edge(1,4)
+    for edge in graph_manager.graph.edges:
+        print(edge)
+    graph_manager.del_edge(4,1)
+    print()
+    for edge in graph_manager.graph.edges:
+        print(edge) 

@@ -203,8 +203,8 @@ class Graph:
                 self.G.add_edge(edge[0], edge[1])
                 self.edges.append(edge)
                 
-    def remove_edge(self, edge_to_remove: tuple[int,int]) -> None:
-        """algorithm for edge removal.
+    def remove_edge(self, edge_to_remove: tuple[int, int]) -> None:
+        """Algorithm for edge removal.
         Consideration:
             We want to maintain graph connectivity such that 
             removing some edge v from g does not result in two
@@ -213,25 +213,29 @@ class Graph:
         This is done through a dfs algorithm implementation.
 
         Args:
-            edge_to_remove (tuple[int,int]): the edge to remove from the graph
+            edge_to_remove (tuple[int, int]): the edge to remove from the graph
         """
         def verification() -> bool:
-            """verifies if the graph is still a connected graph.
+            """Verifies if the graph is still a connected graph.
             Uses dfs from `dfs.py`.
 
             Returns:
-                bool: returns true if the graph is a connected graph, false otherwise
+                bool: Returns true if the graph is a connected graph, false otherwise
             """
             visited = set()
             
             s = next(iter(self.vertices))
-            dfs(self,s,visited)
+            dfs(self, s, visited)
             
             return len(visited) == len(self.vertices)
         
-        if edge_to_remove in self.edges or (edge_to_remove[1],edge_to_remove[0]) in self.edges:
-            self.edges.remove(edge_to_remove)
+        if edge_to_remove in self.edges:
+            self.edges.remove((edge_to_remove[0], edge_to_remove[1]))
+            self.edges.remove((edge_to_remove[1], edge_to_remove[0]))
+                
             self.G.remove_edge(edge_to_remove[0], edge_to_remove[1])
+            # remove mirror
+            # self.G.remove_edge(edge_to_remove[1], edge_to_remove[0])
             
             if not verification():
                 self.edges.append(edge_to_remove)
