@@ -204,10 +204,9 @@ class Graph:
         Args:
             edges_to_add (tuple[int,int]): the edge to add
         """
-        for edge in edges_to_add:
-            if edge not in self.edges and (edge[1], edge[0]) not in self.edges:
-                self.G.add_edge(edge[0], edge[1])
-                self.edges.append(edge)
+        if edges_to_add not in self.edges and (edges_to_add[1], edges_to_add[0]) not in self.edges:
+            self.G.add_edge(edges_to_add[0], edges_to_add[1])
+            self.edges.append(edges_to_add)
                 
     def remove_edge(self, edge_to_remove: tuple[int, int]) -> None:
         """Algorithm for edge removal.
