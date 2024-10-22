@@ -7,6 +7,9 @@ from a_star import *
 from imports import *
 from colorama import Fore, Style, init
 
+import timeit
+import tracemalloc
+
 # Initialize colorama
 init(autoreset=True)
 
@@ -377,19 +380,49 @@ class GraphManager:
                 
                 #output
                 self.print_vertices(path)
-                print("Path:", path)
+                print("\nPath:", path)
                 print("Path:", cost)
                 self.graph.view(path, self.start_index, self.goal_index)
+
+                # TODO: Time complexity, will remove after testing !
+                execution_time = timeit.timeit(lambda: ucs(self.graph, self.start_index, self.goal_index), number = 1)  
+                print(f"\nTime complexity: {execution_time:.10f} seconds")
+
+                # TODO: Memory complexity, will remove after testing !
+                tracemalloc.start()
+                snapshot_before = tracemalloc.take_snapshot()
+                ucs(self.graph, self.start_index, self.goal_index)
+                snapshot_after = tracemalloc.take_snapshot()
+                stats = snapshot_after.compare_to(snapshot_before, 'lineno')
+                total_memory = sum(stat.size for stat in stats)
+                average_memory = total_memory / len(stats) if stats else 0
+                print(f"Memory complexity: {average_memory} MiB\n")
+                tracemalloc.stop()
             elif algorithm == "a*":
                 path, cost = a_star(self.graph, self.start_index, self.goal_index)
                 
                 #output
                 self.print_vertices(path)
-                print("Path:", path)
+                print("\nPath:", path)
                 print("Path:", cost)
                 self.graph.view(path, self.start_index, self.goal_index) 
+
+                # TODO: Time complexity, will remove after testing !
+                execution_time = timeit.timeit(lambda: ucs(self.graph, self.start_index, self.goal_index), number = 1)  
+                print(f"\nTime complexity: {execution_time:.10f} seconds")
+
+                # TODO: Memory complexity, will remove after testing !
+                tracemalloc.start()
+                snapshot_before = tracemalloc.take_snapshot()
+                ucs(self.graph, self.start_index, self.goal_index)
+                snapshot_after = tracemalloc.take_snapshot()
+                stats = snapshot_after.compare_to(snapshot_before, 'lineno')
+                total_memory = sum(stat.size for stat in stats)
+                # average_memory = total_memory / len(stats) if stats else 0
+                print(f"Memory complexity: {average_memory} MiB\n")
+                tracemalloc.stop()
             else:
-                print("Invalid comamnd. Unknown algorithm", algorithm)
+                print("Invalid command. Unknown algorithm", algorithm)
 
     def update_loop(self) -> None:
         """The main program loop
