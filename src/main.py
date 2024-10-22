@@ -424,7 +424,7 @@ class GraphManager:
                 snapshot_after = tracemalloc.take_snapshot()
                 stats = snapshot_after.compare_to(snapshot_before, 'lineno')
                 total_memory = sum(stat.size for stat in stats)
-                # average_memory = total_memory / len(stats) if stats else 0
+                average_memory = total_memory / len(stats) if stats else 0
                 print(f"Memory complexity: {average_memory} MiB\n")
                 tracemalloc.stop()
             else:
