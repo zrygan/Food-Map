@@ -58,7 +58,7 @@ class Graph:
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
 
-    def view(self, path: list[int]=None, start_node: int=None, end_node: int=None) -> None:
+    def view(self, path: list[int] = None, start_node: int = None, end_node: int = None) -> None:
         """View the plot as a UI.
 
         Args:
@@ -66,59 +66,65 @@ class Graph:
             start_node (int, optional): the start node. Defaults to None.
             end_node (int, optional): the end node. Defaults to None.
         """
-        # Create a figure for the plot
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(10, 8))  # Increased figure size for better spacing
 
-        # Draw the graph
         positions = nx.spring_layout(self.G)
 
+        # Node colors
         node_color = []
         for node in self.G.nodes:
             if node == start_node:
-                node_color.append("green")
+                node_color.append("#005C53")  # Dark teal for start node
             elif node == end_node:
-                node_color.append("darkred")
+                node_color.append("#DBF227")  # Bright yellow for end node
             elif path and node in path:
-                node_color.append("red")
+                node_color.append("#9FC131")  # Light green for path nodes
             else:
-                node_color.append("grey")
+                node_color.append("#D6D58E")  # Light beige for other nodes
 
-        edge_color = ["darkred" if path and (u in path and v in path) else "black" for u, v in self.G.edges]
+        # Edge colors
+        edge_color = ["#DBF227" if path and (u in path and v in path) else "#042940" for u, v in self.G.edges]
 
+        # Draw nodes
         nx.draw(
             self.G,
             positions,
-            with_labels=True,
+            with_labels=False,
             node_color=node_color,
             node_size=700,
-            font_size=8,
-            font_color="white",
-            edge_color=edge_color,
             ax=ax,
         )
-        plt.title("Graph of Food Map")
 
-        # Show heuristic values beside each vertex
-        if self.heuristic:
-            heuristic_labels = {vertex: self.heuristic[vertex] for vertex in self.heuristic}
-            offset = 0.05
-            heuristic_label_positions = {
-                vertex: (pos[0], pos[1] + offset) for vertex, pos in positions.items()
-            }
-            nx.draw_networkx_labels(
-                self.G,
-                heuristic_label_positions,
-                labels=heuristic_labels,
-                font_color="blue",
-                ax=ax,
+        # Add labels inside nodes
+        for node in self.G.nodes:
+            ax.text(positions[node][0], positions[node][1], str(node), 
+                    fontsize=10, ha='center', va='center', color='white')
+
+        # Draw edges
+        nx.draw_networkx_edges(self.G, positions, edge_color=edge_color, ax=ax)
+
+        # Draw edge weights
+        edge_labels = nx.get_edge_attributes(self.G, 'weight')  # Assuming weights are stored in edges
+        nx.draw_networkx_edge_labels(self.G, positions, edge_labels=edge_labels, 
+                                    font_color="#042940", label_pos=0.5)  # Position in the middle
+
+        for node in self.heuristic:
+            heuristic_value = self.heuristic[node]  # Access the heuristic value
+            ax.text(
+                positions[node][0], 
+                positions[node][1] + 0.15,  # Adjusted vertical spacing
+                f"{heuristic_value:.2f}",  # Format the heuristic value as a float
+                fontsize=8, 
+                ha='center', 
+                va='bottom', 
+                color="#042940"
             )
 
-        # Show weights of each edge beside it
-        if self.weights:
-            edge_labels = nx.get_edge_attributes(self.G, "weight")
-            nx.draw_networkx_edge_labels(self.G, positions, edge_labels=edge_labels, ax=ax)
-
+        plt.title("Graph of Food Map", fontsize=16, fontweight='bold')
+        plt.axis('off')  # Hide the axes for a cleaner look
+        plt.tight_layout()  # Adjust spacing
         plt.show()
+
     
     def get_neighbors(self, vertex: int) -> None:
         """Returns an iterator containing the neighbors of a given vertex.

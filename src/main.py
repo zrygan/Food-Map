@@ -5,7 +5,7 @@ from graph import *
 from ucs import *
 from a_star import *
 from imports import *
-from colorama import Fore, Style, init
+from colorama import Fore, init
 
 import timeit
 import tracemalloc
@@ -499,12 +499,4 @@ class GraphManager:
 
 if __name__ == "__main__":
     graph_manager = GraphManager()
-    # graph_manager.update_loop()
-    graph_manager.make()
-    graph_manager.add_edge(1,4)
-    for edge in graph_manager.graph.edges:
-        print(edge)
-    graph_manager.del_edge(4,1)
-    print()
-    for edge in graph_manager.graph.edges:
-        print(edge) 
+    graph_manager.update_loop()
