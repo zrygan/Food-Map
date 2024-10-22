@@ -407,12 +407,13 @@ class GraphManager:
                 print(f"Memory complexity: {average_memory} MiB\n")
                 tracemalloc.stop()
             elif algorithm == "a*":
-                path, cost = a_star(self.graph, self.start_index, self.goal_index)
+                path, cost, visited = a_star(self.graph, self.start_index, self.goal_index)
                 
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
                 print("Cost:", cost)
+                print("Visited:", visited, len(visited), "visted vertices")
                 self.graph.view(path, self.start_index, self.goal_index) 
 
                 # TODO: Time complexity, will remove after testing !
