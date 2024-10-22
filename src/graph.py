@@ -58,7 +58,7 @@ class Graph:
             if vertex in self.vertices:
                 self.heuristic[vertex] = heuristic
 
-    def view(self, path: list[int] = None, start_node: int = None, end_node: int = None) -> None:
+    def view(self, path: list[int] = None, start_node: int = None, end_node: int = None, visited: list[int]=None) -> None:
         """View the plot as a UI.
 
         Args:
@@ -79,6 +79,8 @@ class Graph:
                 node_color.append("#DBF227")  # Bright yellow for end node
             elif path and node in path:
                 node_color.append("#9FC131")  # Light green for path nodes
+            elif visited and node in visited:
+                node_color.append("#042940")
             else:
                 node_color.append("#D6D58E")  # Light beige for other nodes
 
