@@ -382,12 +382,13 @@ class GraphManager:
                 self.graph.view(visited, self.start_index, self.goal_index)
             
             elif algorithm == "ucs":
-                path, cost = ucs(self.graph, self.start_index, self.goal_index)
+                path, cost, visited = ucs(self.graph, self.start_index, self.goal_index)
                 
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
                 print("Cost:", cost)
+                print("Visited:", visited, len(visited), "visted vertices")
                 self.graph.view(path, self.start_index, self.goal_index)
 
                 # TODO: Time complexity, will remove after testing !
