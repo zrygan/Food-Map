@@ -387,7 +387,7 @@ class GraphManager:
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
-                print("Path:", cost)
+                print("Cost:", cost)
                 self.graph.view(path, self.start_index, self.goal_index)
 
                 # TODO: Time complexity, will remove after testing !
@@ -410,7 +410,7 @@ class GraphManager:
                 #output
                 self.print_vertices(path)
                 print("\nPath:", path)
-                print("Path:", cost)
+                print("Cost:", cost)
                 self.graph.view(path, self.start_index, self.goal_index) 
 
                 # TODO: Time complexity, will remove after testing !
