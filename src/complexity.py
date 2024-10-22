@@ -154,9 +154,11 @@ def runtime_v_test(
     plt.xticks(a_star_keys)
     plt.xlabel("Test #")
     plt.ylabel("Time (seconds)")
-    plt.title("Runtime of A*, UCS, and DFS")
+    plt.title("Runtime Comparison of A*, UCS, and DFS (per test case)")
     plt.legend()
     plt.grid()
+    
+    # plt.savefig("Result #.png")
     plt.show()
 
 
@@ -198,28 +200,16 @@ def runtime_comparison(
     plt.xticks([])
     plt.legend()
     plt.grid(False)
-
+    
+    # plt.savefig("Result # (per test case).png")
     plt.show()
 
-
 if __name__ == "__main__":
-    rep = 10            # how many times it will do that test case
+    rep = 100           # how many times it will do that test case
     params = {          # Test cases, edges = n(n-1) / 2 
-    1: [10, 15],        # 10 vertices, 15 edges
-    2: [15, 20],        # 15 vertices, 20 edges
-    3: [15, 50],        # 15 vertices, 50 edges
-    4: [20, 40],        # 20 vertices, 40 edges
-    5: [20, 80],        # 20 vertices, 80 edges
-    6: [25, 60],        # 25 vertices, 60 edges
-    7: [25, 90],        # 25 vertices, 90 edges
-    8: [30, 90],        # 30 vertices, 90 edges
-    9: [30, 120],       # 30 vertices, 120 edges
-    10: [35, 100],      # 35 vertices, 100 edges
-    11: [40, 150],      # 40 vertices, 150 edges
-    12: [40, 780],      # 40 vertices, 780 edges
-    13: [45, 180],      # 45 vertices, 180 edges
-    14: [50, 200],      # 50 vertices, 200 edges
-    15: [60, 300],      # 60 vertices, 300 edges
+        1: [10, 22],    # 10 vertices, 22 edges
+        2: [27, 52],    # 10 vertices, 15 edges
+        3: [50, 102]    # 50 vertices, 102 edges
     }
 
     a_star_data, a_star_ave = complex_a_star(rep, params)

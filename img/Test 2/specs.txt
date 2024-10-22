@@ -1,0 +1,6 @@
+rep = 100           # how many times it will do that test case
+params = {          # Test cases, edges = n(n-1) / 2 
+    1: [10, 22],    # 10 vertices, 22 edges
+    2: [27, 52],    # 10 vertices, 15 edges
+    3: [50, 102]    # 50 vertices, 102 edges
+}
