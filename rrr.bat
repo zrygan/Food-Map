@@ -1,1 +1,1 @@
-python App/main.py
+python Source/main.py
