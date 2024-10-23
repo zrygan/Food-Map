@@ -74,15 +74,15 @@ class Graph:
         node_color = []
         for node in self.G.nodes:
             if node == start_node:
-                node_color.append("#005C53")  # Dark teal for start node
+                node_color.append("#9FC131")  # Lime Green
             elif node == end_node:
-                node_color.append("#DBF227")  # Bright yellow for end node
+                node_color.append("#c79c5b")  # Orange
             elif path and node in path:
-                node_color.append("#9FC131")  # Light green for path nodes
+                node_color.append("#ded58e")  # Pale Yellow
             elif visited and node in visited:
-                node_color.append("#042940")
+                node_color.append("#005C53")  # Dark Blue Green
             else:
-                node_color.append("#D6D58E")  # Light beige for other nodes
+                node_color.append("#283c4f")  # Navy blue
 
         # Edge colors
         edge_color = ["#DBF227" if path and (u in path and v in path) else "#042940" for u, v in self.G.edges]

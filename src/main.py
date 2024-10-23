@@ -389,9 +389,9 @@ class GraphManager:
             # Ensure path and cost are valid
             if path:
                 self.print_vertices(path)
-                print("\nPath:", path)
-                print("Cost:", cost)
-                print("Visited:", visited)
+                print("\nVisited:", visited)
+                print("Path:", path)
+                print("Cost:", cost, "\n")
                 self.graph.view(path, self.start_index, self.goal_index, visited)
             else:
                 print("No path found by UCS.")
@@ -403,8 +403,9 @@ class GraphManager:
             # Ensure path is valid
             if path:
                 self.print_vertices(path)
-                print("\nPath:", path)
-                print("Cost:", cost)
+                print("\nVisited:", visited)
+                print("Path:", path)
+                print("Cost:", cost, "\n")
                 self.graph.view(path, self.start_index, self.goal_index, visited)
             else:
                 print("No path found by A*.")
