@@ -345,9 +345,9 @@ class GraphManager:
         """
         for index, name in self.graph.vertices.items():
             if index == self.goal_index:
-                print(f"{index}\t{Fore.GREEN}{name}")
+                print(f"{index}\t{Fore.RED}{name}")
             elif index == self.start_index:
-                print(f"{index}\t{Fore.YELLOW}{name}")
+                print(f"{index}\t{Fore.GREEN}{name}")
             elif path and index in path:
                 print(f"{index}\t{Fore.LIGHTBLACK_EX}{name}")
             else:
@@ -384,7 +384,6 @@ class GraphManager:
         
         elif algorithm == "ucs":
             path, cost, visited = ucs(self.graph, self.start_index, self.goal_index)
-            print(f"UCS Path: {path}, Cost: {cost}, Visited: {visited}")
             
             # Ensure path and cost are valid
             if path:
@@ -398,7 +397,6 @@ class GraphManager:
 
         elif algorithm in ["a*", "a_star"]:
             path, cost, visited = a_star(self.graph, self.start_index, self.goal_index)
-            print(f"A* Path: {path}, Cost: {cost}, Visited: {visited}")
 
             # Ensure path is valid
             if path:
