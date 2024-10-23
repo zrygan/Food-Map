@@ -1,7 +1,8 @@
+@echo off 
+
 REM By: Zhean Ganituen
 REM For windows only
 
-@echo off 
 REM initialize the virtual environment
 python -m venv venv
 
