@@ -4,6 +4,12 @@ Food Map is a project by Mikaela Amon, Thara Corpuz, Zhean Ganituen, Aaron Go, a
 
 ## How To
 
+### To run the App
+
+Simply run the `main.exe` file in the `App` directory.
+
+### To build the App
+
 1. (Optional) Create and use a Python [virtual environment](https://docs.python.org/3/library/venv.html)
 2. Install the dependencies
 3. Running the code
