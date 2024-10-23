@@ -1,5 +1,5 @@
 networkx
 numpy
-scipy
 matplotlib
 indexed-priority-queue
+colorama

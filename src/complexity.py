@@ -2,11 +2,12 @@ from imports import *
 from graph import *
 from ucs import *
 from a_star import *
-import random
-import timeit
+
+# imports for complexity
 import matplotlib.pyplot as plt
 import numpy as np
-
+import random
+import timeit
 
 def create_graph(n_vertices: int, n_edges: int) -> Graph:
     def create_edge(
