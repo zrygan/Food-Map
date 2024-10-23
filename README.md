@@ -54,7 +54,7 @@ Your terminal should now look like
 Simply run:
 
 ```
-$ python src/main.py
+$ python App/main.py
 ```
 
 > Or, if you are in Windows Command Prompt, simply run the batch file: 
